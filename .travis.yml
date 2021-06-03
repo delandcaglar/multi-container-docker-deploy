@@ -20,9 +20,10 @@ after_success:
 
   # login to docker cli
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  
+
   # push images to docker hub
   - docker push lloydnoone/multi-client
   - docker push lloydnoone/multi-nginx
   - docker push lloydnoone/multi-server
   - docker push lloydnoone/multi-worker
+  
