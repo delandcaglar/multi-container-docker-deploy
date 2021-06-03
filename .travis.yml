@@ -1,0 +1,28 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+# add additional build install cmds to add test for server for example
+before_install:
+  - docker build -t lloydnoone/react-test -f ./client/Dockerfile.dev ./client
+
+# add adddtional script cmds for testing the server etc
+script:
+  - docker run -e CI=true lloydnoone/react-test npm test
+
+# build production images
+after_success:
+  - docker build -t lloydnoone/multi-client ./client
+  - docker build -t lloydnoone/multi-nginx ./nginx
+  - docker build -t lloydnoone/multi-server ./server
+  - docker build -t lloydnoone/multi-worker ./worker
+
+  # login to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  
+  # push images to docker hub
+  - docker push lloydnoone/multi-client
+  - docker push lloydnoone/multi-nginx
+  - docker push lloydnoone/multi-server
+  - docker push lloydnoone/multi-worker
