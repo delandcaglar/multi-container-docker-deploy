@@ -27,3 +27,15 @@ after_success:
   - docker push spoonobi/multi-server
   - docker push spoonobi/multi-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: 'eu-west-2'
+  app: 'multi-docker'
+  env: 'Multidocker-env'
+  bucket_name: 'elasticbeanstalk-eu-west-2-819642052814'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+
